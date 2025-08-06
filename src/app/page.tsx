@@ -715,7 +715,7 @@ export default function Home() {
       {isPlaying && (
         <div
           className="
-    fixed top-20 left-1/2 transform -translate-x-1/2
+    fixed top-5 left-1/2 transform -translate-x-1/2
     border-2 border-pink-900 backdrop-blur-md
     text-pink-900 rounded-full shadow-lg
     px-5 py-2 flex items-center gap-3 z-50
