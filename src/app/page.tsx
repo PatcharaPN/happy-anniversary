@@ -173,16 +173,16 @@ export default function Home() {
 
       // ... (rest ตามเดิม)
       case "reviewJourney":
-        timeout = setTimeout(() => setScene("slideshow"), 7000);
+        timeout = setTimeout(() => setScene("slideshow"), 10000);
         break;
       case "showDuration":
-        timeout = setTimeout(() => setScene("showThanks"), 7000);
+        timeout = setTimeout(() => setScene("showThanks"), 10000);
         break;
       case "showThanks":
         timeout = setTimeout(() => setScene("devMessage"), 15000);
         break;
       case "devMessage":
-        timeout = setTimeout(() => setScene("lastThanks"), 7000);
+        timeout = setTimeout(() => setScene("lastThanks"), 10000);
         break;
 
       default:
@@ -668,7 +668,7 @@ export default function Home() {
       {isPlaying && (
         <div
           className="
-    fixed bottom-4 left-1/2 transform -translate-x-1/2
+    fixed bottom-30 left-1/2 transform -translate-x-1/2
     border-2 border-pink-900 backdrop-blur-md
     text-pink-900 rounded-full shadow-lg
     px-5 py-2 flex items-center gap-3 z-50
