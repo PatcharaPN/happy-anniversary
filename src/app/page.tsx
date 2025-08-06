@@ -1,30 +1,41 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 const slides = [
   {
     image: "/1.png",
     caption:
-      "รูปคู่เรามีไม่ค่อยเยอะ ส่วนมากเวลาที่อยู่ด้วยกันเค้าแทบไม่อยากจะเอาโทรศัพท์มาถ่าย",
+      "รูปคู่เรามีไม่ค่อยเยอะ 📸 ส่วนมากเวลาที่อยู่ด้วยกันเค้าแทบไม่อยากจะเอาโทรศัพท์มาถ่าย 😝",
   },
   {
     image: "/2.png",
-    caption: "เค้ารู้สึกว่ามันมีค่ามากๆ รู้สึกอยากกอด แล้วหลับไปไกล้ๆเทอ",
+    caption:
+      "รูปคู่ฮงแด 🏙️ ก่อนบวช 🙏 ขอบคุณที่เป็นเจ้ามือน้าา 💸 ตอนนั้นเค้ายังไม่ได้ทำงาน ลำบากเทออีก 55555 😂",
   },
-  { image: "/3.jpg", caption: "ระหว่างที่เราเดินทางด้วยกัน หรือว่าไปไหนมาไหน" },
-  { image: "/4.jpg", caption: "เค้ามักจะหยิบโทรศัพท์มาถ่าย" },
-  { image: "/5.png", caption: "แม้มันเป็นด้านหลัง" },
-  { image: "/6.png", caption: "ใช่ เค้าอยากอยู่ในเบื้องหลัง" },
+  { image: "/3.jpg", caption: "ไปอีสสลัคกี้บาร์บีคิวกันน 🍖🔥" },
+  {
+    image: "/4.jpg",
+    caption:
+      "เฝ้าไอ้เด็ก 🐶 วันนั้นเราไม่เข้าใจกัน 😔 เค้าก็ยังทำได้แค่อยู่ข้างๆแบบเงียบๆ 🤍",
+  },
+  {
+    image: "/5.png",
+    caption: "ไปเที่ยวอควาเรี่ยม 🐠 กินเค๊กกันด้วยชิ้นนึง 🍰 ก่อนเข้าที่พัก 🏠",
+  },
+  {
+    image: "/6.png",
+    caption: "ชาบูอีกแล้วว 🍲 เที่ยวทีไรก็มีแต่ชาบู 55555 🤭",
+  },
   {
     image: "/7.png",
-    caption: "อยากเป็นเบื้องหลังความสุข หริออะไรก็ได้ที่ทำให้เทอยิ้ม",
+    caption: "เดี๋ยวนะ 🤔 ตรงนี้เราลงมาทำไม 55555555 😂",
   },
-  { image: "/8.png", caption: "หรือความสำเร็จบางอย่างในชีวิตเทอ" },
+  { image: "/8.png", caption: "ให้ใส่บ่อยมว๊าาก 🧥 กลัวเทอร้อนนี่นา ☀️" },
   {
     image: "/9.png",
-    caption:
-      "ความรักของคนเรามันไม่เหมือนกันหรอก แต่เค้าคิดว่า นี้เป็นความรักในรูปแบบของเค้า",
+    caption: "ปิดท้ายด้วยชาบูอีกแย้ววววว 🍲💞",
   },
 ];
 
@@ -56,6 +67,9 @@ export default function Home() {
     | "slideshow"
     | "showDuration"
     | "showThanks"
+    | "devMessage"
+    | "lastThanks"
+    | "gotCooked"
   >("intro");
 
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -88,6 +102,9 @@ export default function Home() {
   useEffect(() => {
     let timeout: NodeJS.Timeout;
     switch (scene) {
+      case "gotCooked":
+        timeout = setTimeout(() => setScene("showAnniversary"), 3000);
+        break;
       case "showAnniversary":
         timeout = setTimeout(() => setScene("askDate"), 3000);
         break;
@@ -95,7 +112,7 @@ export default function Home() {
         timeout = setTimeout(() => setScene("tellSorry"), 3000);
         break;
       case "tellSorry":
-        timeout = setTimeout(() => setScene("tellJoke"), 3000);
+        timeout = setTimeout(() => setScene("tellJoke"), 7000);
         break;
       case "tellJoke":
         timeout = setTimeout(() => setScene("reviewJourney"), 4000);
@@ -106,6 +123,12 @@ export default function Home() {
       case "showDuration":
         timeout = setTimeout(() => setScene("showThanks"), 4000);
         break;
+      case "showThanks":
+        timeout = setTimeout(() => setScene("devMessage"), 7000);
+        break;
+      case "devMessage":
+        timeout = setTimeout(() => setScene("lastThanks"), 7000);
+        break;
       default:
         break;
     }
@@ -113,7 +136,7 @@ export default function Home() {
   }, [scene]);
 
   function handleStart() {
-    setScene("showAnniversary");
+    setScene("gotCooked");
   }
 
   const startDate = new Date(2022, 5, 6);
@@ -127,7 +150,7 @@ export default function Home() {
       animate={{
         background:
           scene === "intro"
-            ? "#000000"
+            ? "#26A4FF"
             : "linear-gradient(180deg, #fbc7d4 0%, #fce8e9 50%, #fef5f1 100%)",
         color: scene === "intro" ? "#ffffff" : "#000000",
       }}
@@ -142,16 +165,31 @@ export default function Home() {
             exit={{ opacity: 0 }}
             className="flex flex-col gap-4 items-center min-h-screen justify-center px-8"
           >
-            <p className="text-3xl">Weather App</p>
+            <p className="text-3xl">ระบบลาออนไลน์</p>
             <button
               onClick={handleStart}
-              className="bg-gray-800 text-white px-4 py-2 mt-4 rounded"
+              className="bg-blue-800 text-white px-4 py-2 mt-4 rounded"
             >
               กดเพื่อยืนยันตัวตนพนักงาน
             </button>
           </motion.div>
         )}
-
+        {scene === "gotCooked" && (
+          <motion.div
+            key="gotCooked"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="flex items-center justify-center min-h-screen"
+          >
+            <p
+              className="text-5xl font-bold text-pink-800"
+              style={{ fontFamily: "Font_th" }}
+            >
+              ว้ายย โดนหลอกแล้ว !
+            </p>
+          </motion.div>
+        )}
         {scene === "showAnniversary" && (
           <motion.div
             key="showAnniversary"
@@ -160,12 +198,22 @@ export default function Home() {
             exit={{ opacity: 0 }}
             className="flex items-center justify-center min-h-screen"
           >
-            <p
-              className="text-5xl font-bold text-pink-800"
-              style={{ fontFamily: "MyFont" }}
-            >
-              Happy Anniversary
-            </p>
+            <div className="flex flex-col items-center justify-center">
+              <p
+                className="text-3xl font-bold text-pink-800"
+                style={{ fontFamily: "MyFont" }}
+              >
+                Happy Anniversary Nakub My Lover
+              </p>
+              <Image
+                className="rounded-full"
+                src={"/June.jpg"}
+                width={150}
+                height={150}
+                alt={""}
+              />
+              <p style={{ fontFamily: "Font_th" }}>ไอ้เด็กจูน</p>
+            </div>
           </motion.div>
         )}
 
@@ -231,7 +279,7 @@ export default function Home() {
               <br />
               ผ่านเรื่องราวทั้งดีและร้ายมากมาย แต่ก็ยังมีกันอยู่ตรงนี้
               <br />
-              ต่อจากนี้... ลองมองย้อนกลับไปด้วยกันนะ 💑
+              ขอบคุณนะคะ 💑
             </p>
           </motion.div>
         )}
@@ -253,13 +301,15 @@ export default function Home() {
                 transition={{ duration: 0.5 }}
                 className="flex flex-col items-center"
               >
-                <img
-                  src={slides[currentSlide].image}
-                  alt={slides[currentSlide].caption}
-                  className="h-48 object-contain select-none rounded-xl border-4 border-pink-200 shadow-lg"
-                  draggable={false}
-                />
-                <p className="mt-2 text-center w-45 text-center text-gray-800 font-medium select-none">
+                <div className="bg-white shadow-lg p-2 pb-6 rounded-md relative">
+                  <img
+                    src={slides[currentSlide].image}
+                    alt={slides[currentSlide].caption}
+                    className="h-70 object-cover rounded-sm"
+                  />
+                  <p className="absolute bottom-2 left-0 w-full text-center text-sm text-gray-700 font-semibold"></p>
+                </div>
+                <p className="mt-2 text-center w-45 text-gray-800 font-medium select-none">
                   {slides[currentSlide].caption}
                 </p>
               </motion.div>
@@ -283,26 +333,84 @@ export default function Home() {
         )}
 
         {scene === "showThanks" && (
+          <motion.p className="text-3xl italic text-pink-600 max-w-md leading-relaxed">
+            {[
+              "สุดท้ายนี้ อยากจะบอกว่า เค้ารักเทอนะ",
+              "ไม่คิดจะรักเทอน้อยลงเลย",
+              "แม้ว่ารูปแบบการอยู่ด้วยกันของเราจะเปลี่ยนไป เพราะเราโตขึ้น",
+              "ต่างคนต่างมีหน้าที่ มีพื้นที่ส่วนตัวที่ต้องอยู่กับตัวเอง",
+              "เค้าไม่น้อยใจเลย มีความสุขมากกว่าอีก ที่ทำให้เทอมีพื้นที่ของตัวเอง",
+              "เป็นผลงานแรกๆที่คิดว่าจำทำเลย แต่สกิลดันไม่ถึง 555555",
+              "แค่อยากทำสิ่งนี้ให้เทอ เพราะเทอเป็นคนสำคัญของเค้า",
+              "ขอบคุณนะคะที่เติบโตมาอย่างดี รักที่สุด ❤️",
+            ].map((line, i) => (
+              <motion.span
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.8, duration: 0.6 }}
+                className="block mb-2 text-lg"
+              >
+                {line}
+              </motion.span>
+            ))}
+          </motion.p>
+        )}
+        {scene === "devMessage" && (
           <motion.div
-            key="showThanks"
+            key="devMessage"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="flex flex-col items-center justify-center min-h-screen px-8 text-center"
           >
-            <p className="text-3xl italic text-pink-600 max-w-md">
-              เรารู้ว่าบางครั้งชีวิตมันก็เหนื่อย
+            {/* <motion.img
+              src="/dev.png" // ใส่รูป dev หรือโลโก้หัวใจได้
+              alt="dev crying"
+              className="h-40 mb-6 rounded-full shadow-lg"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.8 }}
+            /> */}
+            <motion.p
+              className="text-2xl text-pink-700 font-semibold max-w-md"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+            >
+              Dev ที่พัฒนาแอปนี้ร้องไห้ไปแล้ว 10.254851 รอบ
               <br />
-              และบางครั้งเธอก็อาจจะมีเรื่องหนักใจ
+              ระหว่างสร้างมันขึ้นมา
               <br />
-              แต่เราอยากให้เธอรู้ว่า เราพร้อมจะอยู่ข้างๆ เป็นที่พักใจให้เสมอ
+              อยากให้รู้ว่า ทุกอย่างทำจากใจ ตั้งใจทำทุกส่วนเลย
               <br />
-              รับฟังและเข้าใจในทุกอย่างที่เธอเป็น
+              หวังว่าเวลามองสิ่งนี้ จะทำให้เทอยิ้มได้.. ❤️
               <br />
-              ไม่ว่าอะไรจะเกิดขึ้น ที่นี่จะเป็นพื้นที่ปลอดภัยของเรา
-              <br />
-              ที่ที่เราจะเติบโตไปด้วยกัน
+              ปล. มันเป็นเวอร์แรก แต่มันจะดีขึ้นทุกๆครั้งที่ถึงวันครบรอบของเรา..
+            </motion.p>
+          </motion.div>
+        )}
+        {scene === "lastThanks" && (
+          <motion.div
+            key="lastThanks"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="flex flex-col items-center justify-center min-h-screen px-8 text-center"
+          >
+            <p className="text-4xl font-bold text-pink-600">
+              ไม่ว่าจะอย่างไร เค้าก็อยากให้เทอมีความสุข 💖
             </p>
+            <p className="mt-4 text-lg text-gray-700">
+              ถ้าเราได้โตไปด้วยกัน ก็ดีใจมากเลย
+              แม้บางเวลาเทออยากใช้เวลาของตัวเอง เค้าก็พร้อมจะเข้าใจเสมอ
+            </p>
+            <button
+              onClick={() => setScene("intro")}
+              className="mt-6 px-4 py-2 bg-pink-500 text-white rounded"
+            >
+              เริ่มใหม่อีกครั้ง
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
