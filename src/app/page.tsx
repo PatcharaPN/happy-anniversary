@@ -317,7 +317,7 @@ export default function Home() {
               </p>{" "}
               <button
                 onClick={handleBack}
-                className="mt-6 px-4 py-2  rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+                className="flex items-center gap-5 mt-6 px-4 py-2  rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
                 style={{
                   backgroundColor: "#FFCAC9",
                   color: "#9F5857",
@@ -326,7 +326,8 @@ export default function Home() {
                   borderColor: "#9F5857",
                 }}
               >
-                ⬅ ย้อนกลับ
+                <Icon icon="mdi:arrow-left" width="20" />
+                <span>ย้อนกลับ</span>
               </button>
             </div>
           </motion.div>
@@ -345,7 +346,7 @@ export default function Home() {
             </p>
             <button
               onClick={handleBack}
-              className="mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              className="flex items-center gap-5 mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
               style={{
                 backgroundColor: "#FFCAC9",
                 color: "#9F5857",
@@ -354,7 +355,8 @@ export default function Home() {
                 borderColor: "#9F5857",
               }}
             >
-              ⬅ ย้อนกลับ
+              <Icon icon="mdi:arrow-left" width="20" />
+              <span>ย้อนกลับ</span>
             </button>
           </motion.div>
         )}
@@ -376,7 +378,7 @@ export default function Home() {
             </p>{" "}
             <button
               onClick={handleBack}
-              className="mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              className="flex items-center gap-5 mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
               style={{
                 backgroundColor: "#FFCAC9",
                 color: "#9F5857",
@@ -385,7 +387,8 @@ export default function Home() {
                 borderColor: "#9F5857",
               }}
             >
-              ⬅ ย้อนกลับ
+              <Icon icon="mdi:arrow-left" width="20" />
+              <span>ย้อนกลับ</span>
             </button>{" "}
           </motion.div>
         )}
@@ -403,7 +406,7 @@ export default function Home() {
             </p>
             <button
               onClick={handleBack}
-              className="mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              className="flex items-center gap-5 mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
               style={{
                 backgroundColor: "#FFCAC9",
                 color: "#9F5857",
@@ -412,7 +415,8 @@ export default function Home() {
                 borderColor: "#9F5857",
               }}
             >
-              ⬅ ย้อนกลับ
+              <Icon icon="mdi:arrow-left" width="20" />
+              <span>ย้อนกลับ</span>
             </button>
           </motion.div>
         )}
@@ -437,7 +441,7 @@ export default function Home() {
             </p>
             <button
               onClick={handleBack}
-              className="mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              className="flex items-center gap-5 mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
               style={{
                 backgroundColor: "#FFCAC9",
                 color: "#9F5857",
@@ -446,7 +450,8 @@ export default function Home() {
                 borderColor: "#9F5857",
               }}
             >
-              ⬅ ย้อนกลับ
+              <Icon icon="mdi:arrow-left" width="20" />
+              <span>ย้อนกลับ</span>
             </button>
           </motion.div>
         )}
@@ -484,7 +489,7 @@ export default function Home() {
                 {" "}
                 <button
                   onClick={handlePrevSlide}
-                  className="mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+                  className="flex items-center gap-5 mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
                   style={{
                     backgroundColor: "#FFCAC9",
                     color: "#9F5857",
@@ -493,12 +498,13 @@ export default function Home() {
                     borderColor: "#9F5857",
                   }}
                 >
-                  ⬅ ย้อนกลับ
+                  <Icon icon="mdi:arrow-left" width="20" />
+                  <span>ย้อนกลับ</span>
                 </button>{" "}
                 {currentSlide < slides.length - 1 && (
                   <button
                     onClick={handleNextSlide}
-                    className="mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+                    className="flex items-center gap-5 mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
                     style={{
                       backgroundColor: "#FFCAC9",
                       color: "#9F5857",
@@ -507,7 +513,8 @@ export default function Home() {
                       borderColor: "#9F5857",
                     }}
                   >
-                    ➡ ต่อไป
+                    <span>ต่อไป</span>
+                    <Icon icon="mdi:arrow-right" width="20" />
                   </button>
                 )}
               </div>
@@ -529,7 +536,7 @@ export default function Home() {
             <p className="mt-4 text-lg text-gray-600">06/06/2022</p>
             <button
               onClick={handleBack}
-              className="mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              className="flex items-center gap-5 mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
               style={{
                 backgroundColor: "#FFCAC9",
                 color: "#9F5857",
@@ -538,7 +545,8 @@ export default function Home() {
                 borderColor: "#9F5857",
               }}
             >
-              ⬅ ย้อนกลับ
+              <Icon icon="mdi:arrow-left" width="20" />
+              <span>ย้อนกลับ</span>
             </button>
           </motion.div>
         )}
@@ -569,7 +577,7 @@ export default function Home() {
             </motion.p>
             <button
               onClick={handleBack}
-              className="mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold mx-auto"
+              className="flex items-center gap-5 mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold mx-auto"
               style={{
                 backgroundColor: "#FFCAC9",
                 color: "#9F5857",
@@ -578,7 +586,8 @@ export default function Home() {
                 borderColor: "#9F5857",
               }}
             >
-              ⬅ ย้อนกลับ
+              <Icon icon="mdi:arrow-left" width="20" />
+              <span>ย้อนกลับ</span>
             </button>
           </div>
         )}
@@ -616,7 +625,7 @@ export default function Home() {
             </motion.p>
             <button
               onClick={handleBack}
-              className="mt-6 px-4 py-2  rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              className="flex items-center gap-5 mt-6 px-4 py-2  rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
               style={{
                 backgroundColor: "#FFCAC9",
                 color: "#9F5857",
@@ -625,7 +634,8 @@ export default function Home() {
                 borderColor: "#9F5857",
               }}
             >
-              ⬅ ย้อนกลับ
+              <Icon icon="mdi:arrow-left" width="20" />
+              <span>ย้อนกลับ</span>
             </button>
           </motion.div>
         )}
@@ -651,7 +661,7 @@ export default function Home() {
 
             <button
               onClick={() => setScene("intro")}
-              className="mt-6 px-4 py-2 rounded"
+              className="flex items-center gap-5 mt-6 px-4 py-2 rounded"
               style={{
                 backgroundColor: "#FFCAC9",
                 color: "#9F5857",
@@ -660,7 +670,8 @@ export default function Home() {
                 borderColor: "#9F5857",
               }}
             >
-              เริ่มใหม่อีกครั้ง
+              <Icon icon="mdi:restart" width="20" />
+              <span>เริ่มใหม่อีกครั้ง</span>
             </button>
           </motion.div>
         )}
@@ -717,7 +728,7 @@ export default function Home() {
           </button>
 
           <span className="ml-3 text-sm font-medium select-none">
-            กำลังเล่น: Love Story
+            Playing : Love Story
           </span>
         </div>
       )}
