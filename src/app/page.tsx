@@ -142,7 +142,32 @@ export default function Home() {
   const startDate = new Date(2022, 5, 6);
   const now = new Date();
   const diff = diffYMD(startDate, now);
-
+  function handleBack() {
+    const order = [
+      "intro",
+      "gotCooked",
+      "showAnniversary",
+      "askDate",
+      "tellSorry",
+      "tellJoke",
+      "reviewJourney",
+      "slideshow",
+      "showDuration",
+      "showThanks",
+      "devMessage",
+      "lastThanks",
+    ];
+    const idx = order.indexOf(scene);
+    if (idx > 0) {
+      setScene(order[idx - 1] as typeof scene);
+    }
+  }
+  function handlePrevSlide() {
+    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+  }
+  function handleNextSlide() {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  }
   return (
     <motion.div
       className="font-sans flex flex-col items-center justify-center min-h-screen pb-20 sm:p-20 w-full"
@@ -198,7 +223,7 @@ export default function Home() {
             exit={{ opacity: 0 }}
             className="flex items-center justify-center min-h-screen"
           >
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col gap-10 items-center justify-center">
               <p
                 className="text-3xl font-bold text-pink-800"
                 style={{ fontFamily: "MyFont" }}
@@ -212,7 +237,13 @@ export default function Home() {
                 height={150}
                 alt={""}
               />
-              <p style={{ fontFamily: "Font_th" }}>ไอ้เด็กจูน</p>
+              <p style={{ fontFamily: "Font_th" }}>ไอ้เด็กจูน</p>{" "}
+              <button
+                onClick={handleBack}
+                className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              >
+                ⬅ ย้อนกลับ
+              </button>
             </div>
           </motion.div>
         )}
@@ -228,6 +259,12 @@ export default function Home() {
             <p className="text-3xl text-pink-700 font-semibold">
               วันนี้วันอะไร...จำได้มั้ย? 🩷
             </p>
+            <button
+              onClick={handleBack}
+              className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+            >
+              ⬅ ย้อนกลับ
+            </button>
           </motion.div>
         )}
 
@@ -245,7 +282,13 @@ export default function Home() {
               มีแต่ผู้ชายห่วยๆคนนี้ที่จำไม่ได้เลย ขอโทษนะ..
               <br />
               ขอโทษที่ไม่เคยทำอะไรเล็กๆน้อยๆให้เทอแบบนี้มาก่อนเลย
-            </p>
+            </p>{" "}
+            <button
+              onClick={handleBack}
+              className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+            >
+              ⬅ ย้อนกลับ
+            </button>{" "}
           </motion.div>
         )}
 
@@ -260,6 +303,12 @@ export default function Home() {
             <p className="text-2xl text-gray-800">
               วันนี้คือ วันพุธ แฮร่ 5555555
             </p>
+            <button
+              onClick={handleBack}
+              className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+            >
+              ⬅ ย้อนกลับ
+            </button>
           </motion.div>
         )}
 
@@ -281,6 +330,12 @@ export default function Home() {
               <br />
               ขอบคุณนะคะ 💑
             </p>
+            <button
+              onClick={handleBack}
+              className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+            >
+              ⬅ ย้อนกลับ
+            </button>
           </motion.div>
         )}
 
@@ -313,6 +368,23 @@ export default function Home() {
                   {slides[currentSlide].caption}
                 </p>
               </motion.div>
+              <div className="flex items-center gap-5">
+                {" "}
+                <button
+                  onClick={handlePrevSlide}
+                  className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+                >
+                  ⬅ ย้อนกลับ
+                </button>{" "}
+                {currentSlide < slides.length - 1 && (
+                  <button
+                    onClick={handleNextSlide}
+                    className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+                  >
+                    ➡ ต่อไป
+                  </button>
+                )}
+              </div>
             </AnimatePresence>
           </motion.div>
         )}
@@ -329,6 +401,12 @@ export default function Home() {
               เราคบกันมาแล้ว {diff.years} ปี {diff.months} เดือน {diff.days} วัน
             </p>
             <p className="mt-4 text-lg text-gray-600">06/06/2022</p>
+            <button
+              onClick={handleBack}
+              className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+            >
+              ⬅ ย้อนกลับ
+            </button>
           </motion.div>
         )}
 
@@ -354,6 +432,12 @@ export default function Home() {
                 {line}
               </motion.span>
             ))}
+            <button
+              onClick={handleBack}
+              className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+            >
+              ⬅ ย้อนกลับ
+            </button>
           </motion.p>
         )}
         {scene === "devMessage" && (
@@ -388,6 +472,12 @@ export default function Home() {
               <br />
               ปล. มันเป็นเวอร์แรก แต่มันจะดีขึ้นทุกๆครั้งที่ถึงวันครบรอบของเรา..
             </motion.p>
+            <button
+              onClick={handleBack}
+              className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+            >
+              ⬅ ย้อนกลับ
+            </button>
           </motion.div>
         )}
         {scene === "lastThanks" && (
@@ -398,13 +488,15 @@ export default function Home() {
             exit={{ opacity: 0 }}
             className="flex flex-col items-center justify-center min-h-screen px-8 text-center"
           >
-            <p className="text-4xl font-bold text-pink-600">
-              ไม่ว่าจะอย่างไร เค้าก็อยากให้เทอมีความสุข 💖
+            <p className="text-2xl font-bold text-pink-600">
+              สุดท้ายแล้ว... เค้าเชื่อว่าความรักที่แท้จริงคือความเข้าใจ 💖
             </p>
             <p className="mt-4 text-lg text-gray-700">
-              ถ้าเราได้โตไปด้วยกัน ก็ดีใจมากเลย
-              แม้บางเวลาเทออยากใช้เวลาของตัวเอง เค้าก็พร้อมจะเข้าใจเสมอ
+              เราอาจไม่ได้อยู่ด้วยกันตลอดเวลา แต่ถ้าเรายังเข้าใจกันและกัน
+              เค้าคิดว่ามันคือสิ่งที่สำคัญที่สุด
+              และอยากให้เรายังเดินไปด้วยกันด้วยความเข้าใจแบบนี้เสมอ..
             </p>
+
             <button
               onClick={() => setScene("intro")}
               className="mt-6 px-4 py-2 bg-pink-500 text-white rounded"
