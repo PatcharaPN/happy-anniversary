@@ -1,7 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { Icon } from "@iconify/react";
 
 const slides = [
   {
@@ -57,6 +58,8 @@ function diffYMD(start: Date, end: Date) {
 }
 
 export default function Home() {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [scene, setScene] = useState<
     | "intro"
     | "showAnniversary"
@@ -74,8 +77,55 @@ export default function Home() {
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slideRounds, setSlideRounds] = useState(0);
+  function fadeIn(audio: HTMLAudioElement, duration = 2000) {
+    audio.volume = 0;
+    audio.play();
+    const step = 0.05;
+    const intervalTime = (duration * step) / 1;
+    let volume = 0;
 
-  // Handle slideshow slide change every 3 seconds
+    const fadeInterval = setInterval(() => {
+      volume += step;
+      if (volume >= 1) {
+        audio.volume = 1;
+        clearInterval(fadeInterval);
+      } else {
+        audio.volume = volume;
+      }
+    }, intervalTime);
+  }
+  function fadeOut(audio: HTMLAudioElement, duration = 2000) {
+    const step = 0.05;
+    const intervalTime = (duration * step) / 1;
+    let volume = audio.volume;
+
+    const fadeInterval = setInterval(() => {
+      volume -= step;
+      if (volume <= 0) {
+        audio.volume = 0;
+        audio.pause();
+        audio.currentTime = 0;
+        clearInterval(fadeInterval);
+      } else {
+        audio.volume = volume;
+      }
+    }, intervalTime);
+  }
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (scene === "showAnniversary") {
+      if (audio.paused) {
+        fadeIn(audio, 3000);
+      }
+      setIsPlaying(true);
+    }
+
+    if (scene === "lastThanks") {
+      fadeOut(audio, 3000);
+    }
+  }, [scene]);
   useEffect(() => {
     if (scene !== "slideshow") return;
 
@@ -91,47 +141,54 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [scene]);
 
-  // After 1 full slideshow round, go to showDuration
   useEffect(() => {
     if (slideRounds >= 1) {
       setScene("showDuration");
     }
   }, [slideRounds]);
 
-  // Chain scene changes with timeouts
   useEffect(() => {
     let timeout: NodeJS.Timeout;
+
     switch (scene) {
       case "gotCooked":
-        timeout = setTimeout(() => setScene("showAnniversary"), 3000);
-        break;
-      case "showAnniversary":
         timeout = setTimeout(() => setScene("askDate"), 3000);
         break;
+
       case "askDate":
         timeout = setTimeout(() => setScene("tellSorry"), 3000);
         break;
+
       case "tellSorry":
         timeout = setTimeout(() => setScene("tellJoke"), 7000);
         break;
+
       case "tellJoke":
-        timeout = setTimeout(() => setScene("reviewJourney"), 4000);
+        timeout = setTimeout(() => setScene("showAnniversary"), 4000);
         break;
+
+      case "showAnniversary":
+        timeout = setTimeout(() => setScene("reviewJourney"), 3000);
+        break;
+
+      // ... (rest ตามเดิม)
       case "reviewJourney":
         timeout = setTimeout(() => setScene("slideshow"), 7000);
         break;
       case "showDuration":
-        timeout = setTimeout(() => setScene("showThanks"), 15000);
+        timeout = setTimeout(() => setScene("showThanks"), 7000);
         break;
       case "showThanks":
-        timeout = setTimeout(() => setScene("devMessage"), 7000);
+        timeout = setTimeout(() => setScene("devMessage"), 15000);
         break;
       case "devMessage":
         timeout = setTimeout(() => setScene("lastThanks"), 7000);
         break;
+
       default:
         break;
     }
+
     return () => clearTimeout(timeout);
   }, [scene]);
 
@@ -168,6 +225,21 @@ export default function Home() {
   function handleNextSlide() {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
   }
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+
+    audio.addEventListener("play", handlePlay);
+    audio.addEventListener("pause", handlePause);
+
+    return () => {
+      audio.removeEventListener("play", handlePlay);
+      audio.removeEventListener("pause", handlePause);
+    };
+  }, []);
   return (
     <motion.div
       className="font-sans flex flex-col items-center justify-center min-h-screen pb-20 sm:p-20 w-full"
@@ -176,11 +248,12 @@ export default function Home() {
         background:
           scene === "intro"
             ? "#26A4FF"
-            : "linear-gradient(180deg, #fbc7d4 0%, #fce8e9 50%, #fef5f1 100%)",
+            : `url('/background.jpg') no-repeat center center / auto`,
         color: scene === "intro" ? "#ffffff" : "#000000",
       }}
       transition={{ duration: 1 }}
     >
+      <audio ref={audioRef} src="/LoveStory.mp3" preload="auto" />
       <AnimatePresence mode="wait">
         {scene === "intro" && (
           <motion.div
@@ -190,12 +263,14 @@ export default function Home() {
             exit={{ opacity: 0 }}
             className="flex flex-col gap-4 items-center min-h-screen justify-center px-8"
           >
-            <p className="text-3xl">ระบบลาออนไลน์</p>
+            <p className="text-3xl text-center w-50">
+              แบบสอบถามเรื่องการ Training พนักงาน
+            </p>
             <button
               onClick={handleStart}
               className="bg-blue-800 text-white px-4 py-2 mt-4 rounded"
             >
-              กดเพื่อยืนยันตัวตนพนักงาน
+              เริ่มทำแบบทดสอบ
             </button>
           </motion.div>
         )}
@@ -237,10 +312,19 @@ export default function Home() {
                 height={150}
                 alt={""}
               />
-              <p style={{ fontFamily: "Font_th" }}>ไอ้เด็กจูน</p>{" "}
+              <p className="text-4xl" style={{ fontFamily: "Font_th" }}>
+                ไอ้เด็กจูน
+              </p>{" "}
               <button
                 onClick={handleBack}
-                className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+                className="mt-6 px-4 py-2  rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+                style={{
+                  backgroundColor: "#FFCAC9",
+                  color: "#9F5857",
+                  borderWidth: "2px",
+                  borderStyle: "solid",
+                  borderColor: "#9F5857",
+                }}
               >
                 ⬅ ย้อนกลับ
               </button>
@@ -261,7 +345,14 @@ export default function Home() {
             </p>
             <button
               onClick={handleBack}
-              className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              className="mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              style={{
+                backgroundColor: "#FFCAC9",
+                color: "#9F5857",
+                borderWidth: "2px",
+                borderStyle: "solid",
+                borderColor: "#9F5857",
+              }}
             >
               ⬅ ย้อนกลับ
             </button>
@@ -285,7 +376,14 @@ export default function Home() {
             </p>{" "}
             <button
               onClick={handleBack}
-              className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              className="mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              style={{
+                backgroundColor: "#FFCAC9",
+                color: "#9F5857",
+                borderWidth: "2px",
+                borderStyle: "solid",
+                borderColor: "#9F5857",
+              }}
             >
               ⬅ ย้อนกลับ
             </button>{" "}
@@ -305,7 +403,14 @@ export default function Home() {
             </p>
             <button
               onClick={handleBack}
-              className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              className="mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              style={{
+                backgroundColor: "#FFCAC9",
+                color: "#9F5857",
+                borderWidth: "2px",
+                borderStyle: "solid",
+                borderColor: "#9F5857",
+              }}
             >
               ⬅ ย้อนกลับ
             </button>
@@ -332,7 +437,14 @@ export default function Home() {
             </p>
             <button
               onClick={handleBack}
-              className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              className="mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              style={{
+                backgroundColor: "#FFCAC9",
+                color: "#9F5857",
+                borderWidth: "2px",
+                borderStyle: "solid",
+                borderColor: "#9F5857",
+              }}
             >
               ⬅ ย้อนกลับ
             </button>
@@ -372,14 +484,28 @@ export default function Home() {
                 {" "}
                 <button
                   onClick={handlePrevSlide}
-                  className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+                  className="mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+                  style={{
+                    backgroundColor: "#FFCAC9",
+                    color: "#9F5857",
+                    borderWidth: "2px",
+                    borderStyle: "solid",
+                    borderColor: "#9F5857",
+                  }}
                 >
                   ⬅ ย้อนกลับ
                 </button>{" "}
                 {currentSlide < slides.length - 1 && (
                   <button
                     onClick={handleNextSlide}
-                    className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+                    className="mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+                    style={{
+                      backgroundColor: "#FFCAC9",
+                      color: "#9F5857",
+                      borderWidth: "2px",
+                      borderStyle: "solid",
+                      borderColor: "#9F5857",
+                    }}
                   >
                     ➡ ต่อไป
                   </button>
@@ -403,7 +529,14 @@ export default function Home() {
             <p className="mt-4 text-lg text-gray-600">06/06/2022</p>
             <button
               onClick={handleBack}
-              className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              className="mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              style={{
+                backgroundColor: "#FFCAC9",
+                color: "#9F5857",
+                borderWidth: "2px",
+                borderStyle: "solid",
+                borderColor: "#9F5857",
+              }}
             >
               ⬅ ย้อนกลับ
             </button>
@@ -411,34 +544,43 @@ export default function Home() {
         )}
 
         {scene === "showThanks" && (
-          <motion.p className="text-3xl italic text-pink-600 max-w-md leading-relaxed">
-            {[
-              "สุดท้ายนี้ อยากจะบอกว่า เค้ารักเทอนะ",
-              "ไม่คิดจะรักเทอน้อยลงเลย",
-              "แม้ว่ารูปแบบการอยู่ด้วยกันของเราจะเปลี่ยนไป เพราะเราโตขึ้น",
-              "ต่างคนต่างมีหน้าที่ มีพื้นที่ส่วนตัวที่ต้องอยู่กับตัวเอง",
-              "เค้าไม่น้อยใจเลย มีความสุขมากกว่าอีก ที่ทำให้เทอมีพื้นที่ของตัวเอง",
-              "เป็นผลงานแรกๆที่คิดว่าจำทำเลย แต่สกิลดันไม่ถึง 555555",
-              "แค่อยากทำสิ่งนี้ให้เทอ เพราะเทอเป็นคนสำคัญของเค้า",
-              "ขอบคุณนะคะที่เติบโตมาอย่างดี รักที่สุด ❤️",
-            ].map((line, i) => (
-              <motion.span
-                key={i}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.8, duration: 0.6 }}
-                className="block mb-2 text-lg"
-              >
-                {line}
-              </motion.span>
-            ))}
+          <div className="flex flex-col justify-center items-center">
+            <motion.p className="text-3xl italic text-pink-600 max-w-md leading-relaxed text-center">
+              {[
+                "สุดท้ายนี้ อยากจะบอกว่า เค้ารักเทอนะ",
+                "ไม่คิดจะรักเทอน้อยลงเลย",
+                "แม้ว่ารูปแบบการอยู่ด้วยกันของเราจะเปลี่ยนไป เพราะเราโตขึ้น",
+                "ต่างคนต่างมีหน้าที่ มีพื้นที่ส่วนตัวที่ต้องอยู่กับตัวเอง",
+                "เค้าไม่น้อยใจเลย มีความสุขมากกว่าอีก ที่ทำให้เทอมีพื้นที่ของตัวเอง",
+                "เป็นผลงานแรกๆที่คิดว่าจำทำเลย แต่สกิลดันไม่ถึง 555555",
+                "แค่อยากทำสิ่งนี้ให้เทอ เพราะเทอเป็นคนสำคัญของเค้า",
+                "ขอบคุณนะคะที่เติบโตมาอย่างดี รักที่สุด ❤️",
+              ].map((line, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.8, duration: 0.6 }}
+                  className="block mb-2 text-lg"
+                >
+                  {line}
+                </motion.span>
+              ))}
+            </motion.p>
             <button
               onClick={handleBack}
-              className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              className="mt-6 px-4 py-2 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold mx-auto"
+              style={{
+                backgroundColor: "#FFCAC9",
+                color: "#9F5857",
+                borderWidth: "2px",
+                borderStyle: "solid",
+                borderColor: "#9F5857",
+              }}
             >
               ⬅ ย้อนกลับ
             </button>
-          </motion.p>
+          </div>
         )}
         {scene === "devMessage" && (
           <motion.div
@@ -474,7 +616,14 @@ export default function Home() {
             </motion.p>
             <button
               onClick={handleBack}
-              className="mt-6 px-4 py-2 bg-pink-200 text-pink-800 rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              className="mt-6 px-4 py-2  rounded-lg border-2 border-pink-400 shadow-[2px_2px_0px_#000] hover:shadow-[4px_4px_0px_#000] transition-all duration-200 font-bold"
+              style={{
+                backgroundColor: "#FFCAC9",
+                color: "#9F5857",
+                borderWidth: "2px",
+                borderStyle: "solid",
+                borderColor: "#9F5857",
+              }}
             >
               ⬅ ย้อนกลับ
             </button>
@@ -495,17 +644,83 @@ export default function Home() {
               เราอาจไม่ได้อยู่ด้วยกันตลอดเวลา แต่ถ้าเรายังเข้าใจกันและกัน
               เค้าคิดว่ามันคือสิ่งที่สำคัญที่สุด
               และอยากให้เรายังเดินไปด้วยกันด้วยความเข้าใจแบบนี้เสมอ..
+              อาจจะไม่เข้าใจกันไปบ้าง หรือทำตัวไม่ดีไปบ้าง(มาก)
+              แต่ตอนนี้เค้าพยายามเปลี่ยนแปลงตัวเองจริง ๆ
+              เพื่อให้เราทั้งคู่มีทางเดินที่ดีขึ้น ไม่ว่าจะอยู่ในรูปแบบไหนก็ตาม
             </p>
 
             <button
               onClick={() => setScene("intro")}
-              className="mt-6 px-4 py-2 bg-pink-500 text-white rounded"
+              className="mt-6 px-4 py-2 rounded"
+              style={{
+                backgroundColor: "#FFCAC9",
+                color: "#9F5857",
+                borderWidth: "2px",
+                borderStyle: "solid",
+                borderColor: "#9F5857",
+              }}
             >
               เริ่มใหม่อีกครั้ง
             </button>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>{" "}
+      {isPlaying && (
+        <div
+          className="
+    fixed bottom-4 left-1/2 transform -translate-x-1/2
+    border-2 border-pink-900 backdrop-blur-md
+    text-pink-900 rounded-full shadow-lg
+    px-5 py-2 flex items-center gap-3 z-50
+  "
+        >
+          <button
+            onClick={() => {
+              if (!audioRef.current) return;
+              audioRef.current.currentTime = 0;
+              audioRef.current.play();
+            }}
+            className="
+      w-10 h-10 rounded-full bg-white shadow-md
+      hover:bg-pink-100 flex items-center justify-center
+      transition-colors duration-200
+    "
+          >
+            <Icon icon="mdi:skip-previous" width="24" />
+          </button>
+
+          <button
+            onClick={() => {
+              if (!audioRef.current) return;
+              isPlaying ? audioRef.current.pause() : audioRef.current.play();
+            }}
+            className="
+      w-12 h-12 rounded-full bg-white shadow-md
+      hover:bg-pink-100 flex items-center justify-center
+      transition-colors duration-200
+    "
+          >
+            <Icon icon={isPlaying ? "mdi:pause" : "mdi:play"} width="28" />
+          </button>
+
+          <button
+            onClick={() =>
+              audioRef.current && (audioRef.current.currentTime += 10)
+            }
+            className="
+      w-10 h-10 rounded-full bg-white shadow-md
+      hover:bg-pink-100 flex items-center justify-center
+      transition-colors duration-200
+    "
+          >
+            <Icon icon="mdi:skip-next" width="24" />
+          </button>
+
+          <span className="ml-3 text-sm font-medium select-none">
+            กำลังเล่น: Love Story
+          </span>
+        </div>
+      )}
     </motion.div>
   );
 }
