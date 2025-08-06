@@ -118,10 +118,10 @@ export default function Home() {
         timeout = setTimeout(() => setScene("reviewJourney"), 4000);
         break;
       case "reviewJourney":
-        timeout = setTimeout(() => setScene("slideshow"), 4000);
+        timeout = setTimeout(() => setScene("slideshow"), 7000);
         break;
       case "showDuration":
-        timeout = setTimeout(() => setScene("showThanks"), 4000);
+        timeout = setTimeout(() => setScene("showThanks"), 15000);
         break;
       case "showThanks":
         timeout = setTimeout(() => setScene("devMessage"), 7000);
